@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- The page is already dark: stop phone browsers (Samsung Internet, Chrome auto-dark, Dark Reader) from re-darkening it -->
+<meta name="color-scheme" content="dark only">
+<meta name="darkreader-lock">
+<meta name="theme-color" content="#1f0508">
 <title>DigiPen Achievements</title>
 <meta name="description" content="Pick your DigiPen Class of 2026 achievements and share them to your story.">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -20,7 +24,7 @@
   --blue:#1a9fff; --blue-2:#47c2ff; --gold:#f4b73a;
   --f-display:"Chakra Petch","Arial Narrow",sans-serif;
   --f-body:"Nunito Sans","Segoe UI",system-ui,sans-serif;
-  color-scheme:dark;
+  color-scheme:dark only;
 }
 html{background:var(--red-lo)}
 body{
