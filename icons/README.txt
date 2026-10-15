@@ -1,3 +1,5 @@
+Test
+
 Drop your SVGs in this folder. Any file you don't add falls back to the built-in icon.
 
 FORMAT
