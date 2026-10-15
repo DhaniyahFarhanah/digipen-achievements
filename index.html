@@ -62,8 +62,6 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px)
 .tab{appearance:none;border:0;background:transparent;color:var(--muted);font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-radius:999px;cursor:pointer}
 .tab[aria-pressed="true"]{background:#3a3f4a;color:#fff}
 .tab:focus-visible{outline:2px solid var(--blue)}
-.search{background:#2b2f39;border:1px solid transparent;color:var(--text);font:600 14px var(--f-body);padding:8px 12px;border-radius:4px;width:min(220px,100%)}
-.search:focus{outline:none;border-color:var(--blue)}
 
 .list{display:flex;flex-direction:column;gap:6px;padding:0 16px 16px}
 .ach{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--row);border-radius:4px;padding:10px 12px;cursor:pointer;transition:background .15s}
@@ -140,7 +138,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px)
       <canvas id="story" width="1080" height="1920" aria-label="Instagram story preview of your achievements"></canvas>
       <button class="btn alt" id="featBtn" type="button">★ Choose featured</button>
       <button class="btn sec" id="ordBtn" type="button">Choose your top 5</button>
-      <button class="btn" id="saveBtn" type="button">Save story image</button>
+      <button class="btn" id="saveBtn" type="button">Download image</button>
       <div class="hint">Tap achievements to unlock them. Then pick your featured one and your top 5 for the story.</div>
     </section>
 
@@ -155,20 +153,12 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px)
           <button class="tab" data-f="on" aria-pressed="false">Unlocked</button>
           <button class="tab" data-f="off" aria-pressed="false">Locked</button>
         </div>
-        <input class="search" id="search" type="search" placeholder="Search" aria-label="Search achievements">
       </div>
       <div class="list" id="list"></div>
     </section>
   </div>
 </div>
 
-<div class="modal" id="modal" hidden>
-  <div class="box">
-    <img id="outImg" alt="Your achievement story image">
-    <p>If it didn't download, right-click (desktop) or long-press (phone) the image to save it.</p>
-    <button class="ghost" id="closeModal" type="button">Close</button>
-  </div>
-</div>
 
 <div class="modal" id="pick" hidden>
   <div class="box pickbox" role="dialog" aria-labelledby="pickTitle">
@@ -333,7 +323,7 @@ function iconSVG(a,locked,framed){
 /* ---------- state ---------- */
 const KEY='grad-ach-v3';
 const TOTAL=ACH.filter(a=>!a.grp).length+new Set(ACH.filter(a=>a.grp).map(a=>a.grp)).size; // honours tiers count once
-const state={earned:new Set(['did','jarvis','brackeys','apes','bug','ghosted','main','layers','grass','daredevil']),featured:'did',order:[],filter:'all',q:''};
+const state={earned:new Set(['did','jarvis','brackeys','apes','bug','ghosted','main','layers','grass','daredevil']),featured:'did',order:[],filter:'all'};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){state.earned=new Set(s.earned.filter(id=>ACH.some(a=>a.id===id)));state.featured=s.featured;state.order=Array.isArray(s.order)?s.order:[]}}catch(e){}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({earned:[...state.earned],featured:state.featured,order:state.order}))}catch(e){}}
 
@@ -358,14 +348,13 @@ function renderList(){
   $('#progBar').style.width=p+'%';
   const feat=featuredAch();
   const order=storyList().chosen.map(a=>a.id);
-  const q=state.q.trim().toLowerCase();
   const items=ACH.filter(a=>{
     const on=state.earned.has(a.id);
     if(state.filter==='on'&&!on)return false;
     if(state.filter==='off'&&on)return false;
-    return !q||(a.t+' '+a.d).toLowerCase().includes(q);
+    return true;
   });
-  if(!items.length){listEl.innerHTML=`<div class="empty">No achievements match that.</div>`;return}
+  if(!items.length){listEl.innerHTML=`<div class="empty">Nothing here yet.</div>`;return}
   listEl.innerHTML=items.map(a=>{
     const on=state.earned.has(a.id), isF=feat&&feat.id===a.id;
     return `<div class="ach ${on?'on':'locked'}${isF?' featured':''}" role="button" tabindex="0" aria-pressed="${on}" data-id="${a.id}">
@@ -393,7 +382,6 @@ listEl.addEventListener('keydown',e=>{
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
   state.filter=b.dataset.f;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-pressed',x===b));renderList();
 }));
-$('#search').addEventListener('input',e=>{state.q=e.target.value;renderList()});
 
 /* ---------- story canvas ---------- */
 const cv=$('#story'),ctx=cv.getContext('2d'),W=1080,H=1920;
@@ -427,7 +415,7 @@ const FONT_FACES=['600 26px "Chakra Petch"','800 30px "Nunito Sans"','700 25px "
 const fontsReady=(document.fonts&&document.fonts.load)
   ?Promise.all(FONT_FACES.map(f=>document.fonts.load(f).catch(()=>null))).catch(()=>null)
   :Promise.resolve();
-let tok=0, latestBlob=null;
+let tok=0;
 async function drawStory(){
   const my=++tok;
   await fontsReady;
@@ -554,7 +542,6 @@ async function drawStory(){
     if(lOver){const lx=x0+lockShow.length*(L+gap);rr(lx+6,y+6,L-12,L-12,10);ctx.fillStyle='#2b2f39';ctx.fill();
       font(800,40);ctx.fillStyle='#c3c8d0';ctx.textAlign='center';ctx.fillText('+'+lOver,lx+L/2,y+L/2+14)}
   }
-  try{cv.toBlob(b=>{if(my===tok)latestBlob=b},'image/png')}catch(e){latestBlob=null}
 }
 
 /* ---------- featured picker ---------- */
@@ -605,22 +592,16 @@ ord.addEventListener('click',e=>{if(e.target===ord){closeOrd();return}const r=e.
 ordList.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.ord){e.preventDefault();tapOrder(e.target.dataset.ord)}});
 
 /* ---------- export ---------- */
-const modal=$('#modal'),outImg=$('#outImg');
-const canShareFiles=(()=>{try{return !!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/png'})],'t.png',{type:'image/png'})]}))}catch(e){return false}})();
-if(canShareFiles)$('#saveBtn').textContent='Share or save image';
 $('#saveBtn').addEventListener('click',async()=>{
-  if(canShareFiles&&latestBlob){
-    try{await navigator.share({files:[new File([latestBlob],'digipen-achievements.png',{type:'image/png'})]});return}
-    catch(e){if(e&&e.name==='AbortError')return}
-  }
   await drawStory();
-  const url=cv.toDataURL('image/png');
-  try{const a=document.createElement('a');a.href=url;a.download='digipen-achievements.png';document.body.appendChild(a);a.click();a.remove()}catch(e){}
-  outImg.src=url;modal.hidden=false;$('#closeModal').focus();
+  const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+  if(!blob)return;
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='digipen-achievements.png';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
 });
-$('#closeModal').addEventListener('click',()=>{modal.hidden=true});
-modal.addEventListener('click',e=>{if(e.target===modal)modal.hidden=true});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.hidden=true;pick.hidden=true;ord.hidden=true}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){pick.hidden=true;ord.hidden=true}});
 
 function update(){persist();renderList();drawStory()}
 renderList();drawStory();
