@@ -422,10 +422,15 @@ function sparkle(cx,cy,r){
   ctx.beginPath();ctx.moveTo(cx,cy-r);ctx.quadraticCurveTo(cx,cy,cx+r,cy);ctx.quadraticCurveTo(cx,cy,cx,cy+r);
   ctx.quadraticCurveTo(cx,cy,cx-r,cy);ctx.quadraticCurveTo(cx,cy,cx,cy-r);ctx.fillStyle='#fff7d6';ctx.fill();ctx.restore();
 }
+// make sure the story image uses the real fonts, not a fallback (the canvas can draw before they finish downloading)
+const FONT_FACES=['600 26px "Chakra Petch"','800 30px "Nunito Sans"','700 25px "Nunito Sans"','600 26px "Nunito Sans"'];
+const fontsReady=(document.fonts&&document.fonts.load)
+  ?Promise.all(FONT_FACES.map(f=>document.fonts.load(f).catch(()=>null))).catch(()=>null)
+  :Promise.resolve();
 let tok=0, latestBlob=null;
 async function drawStory(){
   const my=++tok;
-  await document.fonts.ready;
+  await fontsReady;
   const earned=ACH.filter(a=>state.earned.has(a.id));
   const locked=ACH.filter(a=>!state.earned.has(a.id)&&!(a.grp&&ACH.some(o=>o.grp===a.grp&&state.earned.has(o.id))));
   const feat=featuredAch();
