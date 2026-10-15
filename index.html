@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigiPen Achievements</title>
+<meta name="description" content="Pick your DigiPen Class of 2026 achievements and share them to your story.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Nunito+Sans:wght@400;600;700;800;900&display=swap">
+<style>
+/* Layout: Steam overlay on a red field. Live story preview (left, sticky) + Steam-style achievement list (right); stacks on phones. */
+:root{
+  --red-hi:#c71b27; --red-mid:#6d0b13; --red-lo:#1f0508;
+  --panel:#15181e; --row:#23262e; --row-hover:#2b2f39; --line:rgba(255,255,255,.08);
+  --text:#e6e9ee; --muted:#9aa3ad; --dim:#6f7783;
+  --blue:#1a9fff; --blue-2:#47c2ff; --gold:#f4b73a;
+  --f-display:"Chakra Petch","Arial Narrow",sans-serif;
+  --f-body:"Nunito Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html{background:var(--red-lo)}
+body{
+  background:var(--red-lo) radial-gradient(ellipse 90% 60% at 50% -5%,var(--red-hi),var(--red-mid) 55%,var(--red-lo) 100%) no-repeat;
+  background-attachment:fixed;
+  color:var(--text); font-family:var(--f-body); font-size:15px; line-height:1.45;
+  min-height:100%;
+}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:24px}
+.eyebrow{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#ffb3b8;opacity:.85}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px);line-height:1.05;margin:6px 0 0;text-wrap:balance;letter-spacing:.01em}
+.name{display:flex;flex-direction:column;gap:6px;min-width:0}
+.name label{font-family:var(--f-display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.name input{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);color:var(--text);font:600 16px var(--f-body);padding:10px 12px;border-radius:6px;width:min(260px,100%)}
+.name input:focus{outline:2px solid var(--blue);outline-offset:1px}
+
+.grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+.preview{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;gap:12px;align-items:center}
+@media (max-width:820px){.preview{position:static}}
+.preview canvas{width:100%;max-width:380px;aspect-ratio:9/16;height:auto;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);background:#2a0609}
+.btn{appearance:none;border:0;cursor:pointer;font:800 15px var(--f-body);letter-spacing:.02em;border-radius:6px;padding:12px 18px;color:#fff;
+  background:linear-gradient(180deg,var(--blue-2),var(--blue));box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.btn:hover{filter:brightness(1.08)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.preview .btn{width:100%;max-width:380px}
+.hint{font-size:13px;color:#f3c9cc;text-align:center;max-width:380px}
+
+.panel{background:color-mix(in srgb,var(--panel) 94%,transparent);border-radius:10px;box-shadow:0 0 0 1px var(--line);overflow:hidden;min-width:0}
+.progress{margin:16px;padding:14px 16px;background:rgba(255,255,255,.04);border-radius:6px}
+.progress .row{display:flex;justify-content:space-between;gap:12px;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.bar{height:8px;margin-top:10px;background:#3a3f4a;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue-2),var(--blue));border-radius:4px;transition:width .3s}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:0 16px 12px}
+.tabs{display:flex;gap:4px}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-radius:999px;cursor:pointer}
+.tab[aria-pressed="true"]{background:#3a3f4a;color:#fff}
+.tab:focus-visible{outline:2px solid var(--blue)}
+.search{background:#2b2f39;border:1px solid transparent;color:var(--text);font:600 14px var(--f-body);padding:8px 12px;border-radius:4px;width:min(220px,100%)}
+.search:focus{outline:none;border-color:var(--blue)}
+
+.list{display:flex;flex-direction:column;gap:6px;padding:0 16px 16px}
+.ach{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--row);border-radius:4px;padding:10px 12px;cursor:pointer;transition:background .15s}
+.ach:hover{background:var(--row-hover)}
+.ach:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.ach .ic{width:64px;height:64px;position:relative}
+.ach.featured{background:linear-gradient(100deg,#3a2a14,var(--row) 45%);box-shadow:inset 0 0 0 1px rgba(244,183,58,.55);position:relative;overflow:hidden}
+.ach.featured::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,230,160,.18) 50%,transparent 65%);background-size:250% 100%;animation:shine 3.2s ease-in-out infinite}
+.ach.featured .ic::before,.ach.featured .ic::after{content:"";position:absolute;width:14px;height:14px;background:#fff7d6;
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 4px #ffc24a);animation:twinkle 1.6s ease-in-out infinite}
+.ach.featured .ic::before{top:-4px;right:-4px}
+.ach.featured .ic::after{bottom:-2px;left:-4px;width:10px;height:10px;animation-delay:.8s}
+@keyframes shine{0%{background-position:150% 0}60%,100%{background-position:-50% 0}}
+@keyframes twinkle{0%,100%{transform:scale(.4);opacity:.4}50%{transform:scale(1);opacity:1}}
+.ach .ic svg{width:100%;height:100%;display:block}
+.ach h3{margin:0;font-size:17px;font-weight:800;color:#fff;line-height:1.2}
+.ach p{margin:2px 0 0;font-size:13.5px;color:#c3c8d0}
+.ach .pct{font-size:12.5px;color:var(--dim)}
+.ach.locked h3{color:#b5bac2}
+.ach.locked p{color:#8c939d}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.state{font-size:12.5px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ach.on .state{color:#9fd8ff}
+.feat{appearance:none;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--muted);font:700 12px var(--f-body);padding:5px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.feat:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.feat[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#2a1700}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+@media (max-width:480px){.ach{grid-template-columns:52px minmax(0,1fr);}.ach .ic{width:52px;height:52px}.side{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}}
+
+.modal{position:fixed;inset:0;z-index:20;background:rgba(5,6,9,.82);display:flex;align-items:center;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal[hidden]{display:none}
+.btn.sec{background:#3a3f4a}
+.slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:14px 16px 0}
+.slot{background:#23262e;border-radius:6px;padding:8px;min-height:62px;display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.2;color:var(--dim);min-width:0}
+.slot b{font:700 14px var(--f-display);color:var(--muted)}
+.slot span{overflow-wrap:anywhere}
+.slot.on{box-shadow:inset 0 0 0 1px var(--blue);color:#fff}
+.slot.on b{color:var(--blue-2)}
+.ordnote{margin:0;padding:10px 16px 0;font-size:13px;color:var(--muted);text-align:left!important}
+.ach.dim{opacity:.4}
+.pickfoot{display:flex;justify-content:space-between;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.btn.alt{background:linear-gradient(180deg,#ffd77a,var(--gold));color:#2a1700}
+.ord{display:inline-block;min-width:26px;text-align:center;background:#1a9fff;color:#fff;font-weight:800;border-radius:999px;padding:1px 7px;margin-right:4px}
+.fchip{background:var(--gold);color:#2a1700;font:800 12px var(--f-body);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pickbox{max-width:560px;align-items:stretch;padding:0;overflow:hidden}
+.pickhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.pickhead h2{margin:0;font:700 18px var(--f-display);letter-spacing:.02em}
+.modal .box.pickbox{align-items:stretch;gap:0}
+.picklist{overflow-y:auto;padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1;min-height:0}
+.pickbox .ach{grid-template-columns:56px minmax(0,1fr) auto;flex-shrink:0}
+.pickbox .ach p{text-align:left}
+.pickbox .ach .ic{width:56px;height:56px}
+.modal .box{background:var(--panel);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center;max-height:100%;max-width:420px;width:100%;box-shadow:0 0 0 1px var(--line)}
+.modal img{max-height:62vh;width:auto;max-width:100%;border-radius:8px}
+.modal p{margin:0;font-size:14px;color:#c3c8d0;text-align:center}
+.ghost{appearance:none;background:#2b2f39;border:0;color:#fff;font:700 14px var(--f-body);padding:10px 16px;border-radius:6px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Trial build · placeholder achievements</div>
+      <h1>DigiPen Achievements</h1>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="preview" aria-label="Story preview">
+      <canvas id="story" width="1080" height="1920" aria-label="Instagram story preview of your achievements"></canvas>
+      <button class="btn alt" id="featBtn" type="button">★ Choose featured</button>
+      <button class="btn sec" id="ordBtn" type="button">Choose your top 5</button>
+      <button class="btn" id="saveBtn" type="button">Save story image</button>
+      <div class="hint">Tap achievements to unlock them. Then pick your featured one and your top 5 for the story.</div>
+    </section>
+
+    <section class="panel" aria-label="Achievements">
+      <div class="progress">
+        <div class="row"><span id="progText">0 of 0 achievements earned</span><span id="progPct">(0%)</span></div>
+        <div class="bar"><i id="progBar" style="width:0"></i></div>
+      </div>
+      <div class="tools">
+        <div class="tabs" role="group" aria-label="Filter">
+          <button class="tab" data-f="all" aria-pressed="true">All</button>
+          <button class="tab" data-f="on" aria-pressed="false">Unlocked</button>
+          <button class="tab" data-f="off" aria-pressed="false">Locked</button>
+        </div>
+        <input class="search" id="search" type="search" placeholder="Search" aria-label="Search achievements">
+      </div>
+      <div class="list" id="list"></div>
+    </section>
+  </div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="box">
+    <img id="outImg" alt="Your achievement story image">
+    <p>If it didn't download, right-click (desktop) or long-press (phone) the image to save it.</p>
+    <button class="ghost" id="closeModal" type="button">Close</button>
+  </div>
+</div>
+
+<div class="modal" id="pick" hidden>
+  <div class="box pickbox" role="dialog" aria-labelledby="pickTitle">
+    <div class="pickhead"><h2 id="pickTitle">Choose your featured achievement</h2><button class="ghost" id="closePick" type="button">Close</button></div>
+    <div class="picklist" id="pickList"></div>
+  </div>
+</div>
+
+<div class="modal" id="order" hidden>
+  <div class="box pickbox" role="dialog" aria-labelledby="ordTitle">
+    <div class="pickhead"><h2 id="ordTitle">Choose your top 5</h2><button class="ghost" id="closeOrd" type="button">Close</button></div>
+    <div class="slots" id="ordSlots"></div>
+    <p class="ordnote" id="ordNote"></p>
+    <div class="picklist" id="ordList"></div>
+    <div class="pickfoot"><button class="ghost" id="clearOrd" type="button">Clear all</button><button class="btn" id="doneOrd" type="button">Done</button></div>
+  </div>
+</div>
+
+<script>
+/* ---------- data (placeholders) ---------- */
+const ACH = [
+  {id:'did',      t:'Finally Made It', d:'Survive 4 years in DigiPen', pct:61.8, hue:352, g:'cap'},
+  {id:'tired',    t:"I'm tired boss :(", d:'Opened the Drop-Out form at least once', pct:42.7, hue:330, g:'form'},
+  {id:'usa',      t:'My Pronouns are U/S/A', d:'Went to Redmond, Washington', pct:12.4, hue:222, g:'flag'},
+  {id:'human',    t:'Human Made Horrors Beyond Comprehension', d:'Create a project WITHOUT any AI assistance', pct:18.9, hue:20, g:'pen'},
+  {id:'jarvis',   t:"Jarvis, Show Me This Guy's Balls", d:'Used AI for an assignment', pct:87.3, hue:190, g:'robot'},
+  {id:'job',      t:'Michael Would Be Proud', d:'Got a job', pct:38.5, hue:135, g:'cash'},
+  {id:'pm',       t:"I'm Surrounded By Idiots", d:'Become a Project Manager (not by choice)', pct:57.0, hue:262, g:'clip'},
+  {id:'scrum',    t:'Scrum Master', d:'Spearhead a scrum meeting', pct:49.2, hue:175, g:'board'},
+  {id:'bfa',      t:'Honorary BFA', d:'Make art for a game project', pct:72.4, hue:300, g:'brush'},
+  {id:'rtis',     t:'Honorary RTIS', d:'Code the majority of a game project', pct:33.8, hue:160, g:'code'},
+  {id:'blender',  t:'Blender Expert', d:'Make majority of the 3D assets for a game project', pct:26.1, hue:200, g:'cube'},
+  {id:'beats',    t:'Sick Drag-And-Drop Beats Bro!', d:'Make music & sound assets for a game project', pct:29.5, hue:280, g:'note'},
+  {id:'voice',    t:'*Dust Bunny Moaning*', d:'Voice act for a game project', pct:21.7, hue:10, g:'mic'},
+  {id:'fps',      t:'Why Is My Game At 2 FPS?', d:'Make VFX for a game project', pct:24.3, hue:195, g:'burst'},
+  {id:'brackeys', t:'Brackeys, Our Lord & Savior', d:'Watch at least 10 Brackeys tutorials', pct:94.2, hue:205, g:'play', b:'x10'},
+  {id:'main',     t:'Wait...Is This In Main?', d:'Lose a full day of work to version control', pct:70.2, hue:282, g:'branch'},
+  {id:'aaa',      t:'Triple A', d:'Scope crept so hard that a project was underdelivered', pct:63.4, hue:230, g:'trophy'},
+  {id:'bug',      t:"It's Not A Bug, It's A Feature", d:'Submitted a game or project with tons of bugs in it (and still passed)', pct:97.6, hue:92, g:'bug'},
+  {id:'can',      t:'"Can Is Can"', d:'Add "just one more feature" before submission', pct:76.5, hue:25, g:'can'},
+  {id:'ghosted',  t:'Ghosted', d:'Have a teammate vanish mid-project', pct:44.8, hue:215, g:'ghost'},
+  {id:'spoil',    t:'Spoil Market', d:'Be told you are "Spoiling Market" at least once', pct:9.1, hue:46, g:'scroll'},
+  {id:'machine',  t:'Worked On My Machine', d:"Have a build that didn't work on the school computer", pct:58.4, hue:8, g:'warn'},
+  {id:'so',       t:'Trauma Bonded Too Hard', d:'Found a significant other in school', pct:16.3, hue:340, g:'heart'},
+  {id:'apes',     t:'Apes. Together. Strong', d:'Made lifelong friends', pct:81.9, hue:95, g:'people'},
+  {id:'daredevil',t:'Daredevil', d:'Submit an assignment seconds before the deadline', pct:66.7, hue:5, g:'clock'},
+  {id:'honk',     t:'Honk Mi Mi Mi', d:'Manage to sleep 8 hours before a deadline', pct:6.2, hue:240, g:'zzz'},
+  {id:'grass',    t:'Touch Grass', d:'Leave the campus while the sun is still up', pct:4.9, hue:118, g:'grass'},
+  {id:'cha',      t:'Charisma 100', d:'Beg for an extension (and got it!)', pct:27.3, hue:50, g:'star', b:'100'},
+  {id:'wfh',      t:'Work From Home', d:'Stayed at home during a school day to work on assignments', pct:68.7, hue:30, g:'house'},
+  {id:'layers',   t:'Layer 847 Copy 2', d:'Hand off a design file with zero named layers', pct:55.3, hue:265, g:'layers'},
+  {id:'gd',       t:'Graphic Design Is My Passion', d:'Unnecessarily make an assignment look extra nice', pct:48.6, hue:320, g:'type'},
+];
+
+/* ---------- icon builder (same SVG for list + canvas) ---------- */
+const SW=w=>`fill="none" stroke="CLR" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
+const S=SW(5);
+const F='fill="CLR"';
+const GLYPH={
+  board:`<rect x="4" y="8" width="56" height="48" rx="5" ${F}/><g fill="DARK"><rect x="10" y="15" width="12" height="10" rx="1.5"/><rect x="26" y="15" width="12" height="10" rx="1.5"/><rect x="42" y="15" width="12" height="10" rx="1.5"/><rect x="10" y="29" width="12" height="10" rx="1.5"/><rect x="26" y="29" width="12" height="10" rx="1.5"/><rect x="10" y="43" width="12" height="7" rx="1.5"/></g>`,
+  burst:`<path d="M32 2l5 18 16-10-10 16 19 6-19 6 10 16-16-10-5 18-5-18-16 10 10-16-19-6 19-6-10-16 16 10z" ${F}/><circle cx="32" cy="32" r="6" fill="DARK"/>`,
+  form:`<rect x="12" y="5" width="40" height="54" rx="5" ${F}/><path d="M22 22l20 20M42 22 22 42" stroke="DARK" stroke-width="5" stroke-linecap="round"/>`,
+  flag:`<rect x="6" y="10" width="52" height="40" rx="2" ${F}/><path d="M6 20h52M6 30h52M6 40h52" stroke="DARK" stroke-opacity=".55" stroke-width="3"/><rect x="6" y="10" width="24" height="20" fill="DARK"/><path d="M18 14l2 4.5 5 .5-3.8 3.3 1.2 4.9L18 24.7l-4.4 2.5 1.2-4.9L11 19l5-.5z" ${F}/>`,
+  robot:`<path d="M32 6v8M4 27v10M60 27v10" ${S}/><circle cx="32" cy="6" r="4" ${F}/><rect x="10" y="14" width="44" height="38" rx="9" ${F}/><circle cx="23" cy="31" r="5" fill="DARK"/><circle cx="41" cy="31" r="5" fill="DARK"/><path d="M24 43h16" stroke="DARK" stroke-width="3.5" stroke-linecap="round"/>`,
+  cash:`<rect x="4" y="14" width="56" height="36" rx="5" ${F}/><circle cx="32" cy="32" r="11" fill="DARK"/><path d="M37 26c-2-2-10-3-10 1.5S37 30 37 35s-8 3.5-10 1.5M32 21v22" ${SW(3)}/><circle cx="12" cy="22" r="2.5" fill="DARK"/><circle cx="52" cy="42" r="2.5" fill="DARK"/>`,
+  brief:`<path d="M22 18v-6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v6" ${S}/><rect x="6" y="18" width="52" height="38" rx="6" ${F}/><path d="M6 34h52" stroke="DARK" stroke-width="3"/><rect x="28" y="30" width="8" height="8" rx="1.5" fill="DARK"/>`,
+  clip:`<rect x="10" y="10" width="44" height="50" rx="5" ${F}/><rect x="22" y="4" width="20" height="12" rx="3" fill="DARK"/><path d="M19 30l4 4 8-8M19 46l4 4 8-8M37 31h9M37 47h9" stroke="DARK" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+  brush:`<path d="M50 4 60 14 34 40 24 30z" ${F}/><path d="M22 33c-8 0-12 6-12 12 0 6-4 9-8 10 13 4 26 0 26-12z" ${F}/>`,
+  code:`<path d="M22 16 6 32l16 16M42 16l16 16-16 16M37 8 27 56" ${S}/>`,
+  cube:`<path d="M32 4 56 17v30L32 60 8 47V17z" ${F}/><path d="M8 17l24 13 24-13M32 30v30" stroke="DARK" stroke-width="3" stroke-linejoin="round" fill="none"/>`,
+  note:`<path d="M24 46V12l30-6v34" ${S}/><ellipse cx="16" cy="47" rx="9" ry="7" ${F}/><ellipse cx="46" cy="41" rx="9" ry="7" ${F}/>`,
+  mic:`<rect x="22" y="4" width="20" height="34" rx="10" ${F}/><path d="M12 29a20 20 0 0 0 40 0M32 49v10M22 59h20" ${S}/>`,
+  play:`<rect x="4" y="12" width="56" height="40" rx="11" ${F}/><path d="M26 22v20l17-10z" fill="DARK"/>`,
+  heart:`<path d="M32 56S5 40 5 21A13.5 13.5 0 0 1 32 15a13.5 13.5 0 0 1 27 6c0 19-27 35-27 35z" ${F}/>`,
+  people:`<circle cx="22" cy="19" r="9" ${F}/><circle cx="45" cy="22" r="8" ${F}/><path d="M3 57c0-12 8-20 19-20s19 8 19 20z" ${F}/><path d="M43 57c0-8-2-14-6-18 2-1 5-2 8-2 9 0 16 7 16 20z" ${F}/>`,
+  can:`<path d="M14 12h36v42a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" ${F}/><path d="M14 24h36M14 46h36" stroke="DARK" stroke-width="3"/><ellipse cx="32" cy="12" rx="18" ry="5" ${F}/><ellipse cx="32" cy="12" rx="13" ry="3" fill="DARK" fill-opacity=".4"/>`,
+  star:`<path d="M32 4l8.5 18 19.5 2.2-14.6 13.3 4.2 19.5L32 47l-17.6 10 4.2-19.5L4 24.2 23.5 22z" ${F}/>`,
+  house:`<path d="M5 31 32 8l27 23" ${S}/><path d="M14 27v30h36V27L32 12z" ${F}/><rect x="27" y="40" width="10" height="17" fill="DARK"/>`,
+  type:`<path d="M5 56 21 10h4l16 46M11 40h24M51 18v38M45 18h12M45 56h12" ${S}/>`,
+  cap:`<path d="M2 24 32 10l30 14-30 14z" ${F}/><path d="M14 31v13c8 8 28 8 36 0V31L32 40z" ${F} fill-opacity=".8"/><path d="M57 27v17" ${SW(3.5)}/><circle cx="57" cy="47" r="4" ${F}/>`,
+  grass:`<path d="M10 56c0-14-2-22-7-30M23 56c0-18 2-30 10-42M37 56c0-12 4-22 12-30M50 56c0-8 3-14 9-19" ${S}/><path d="M3 57h58" ${S}/>`,
+  zzz:`<path d="M6 24h16L6 42h16M28 12h13L28 27h13M42 40h15L42 56h15" ${S}/>`,
+  trophy:`<path d="M18 6h28v18a14 14 0 0 1-28 0z" ${F}/><path d="M18 11H9v4a10 10 0 0 0 10 10M46 11h9v4a10 10 0 0 1-10 10M32 38v10" ${S}/><rect x="19" y="48" width="26" height="9" rx="2" ${F}/>`,
+  skull:`<path d="M32 5C18 5 8 14 8 27c0 8 4 13 8 16v12h32V43c4-3 8-8 8-16C56 14 46 5 32 5z" ${F}/><circle cx="23" cy="29" r="6" fill="DARK"/><circle cx="41" cy="29" r="6" fill="DARK"/><path d="M26 55v-7M32 55v-7M38 55v-7" stroke="DARK" stroke-width="3"/>`,
+  moon:`<path d="M42 6a26 26 0 1 0 17 40A21 21 0 0 1 42 6z" ${F}/><circle cx="52" cy="14" r="3" ${F}/><circle cx="58" cy="26" r="2" ${F}/>`,
+  scroll:`<rect x="12" y="5" width="40" height="54" rx="5" ${F}/><path d="M20 18h24M20 28h24M20 38h24M20 48h14" stroke="DARK" stroke-width="4" stroke-linecap="round"/>`,
+  ghost:`<path d="M13 58V28a19 19 0 0 1 38 0v30l-6.3-6-6.3 6-6.4-6-6.3 6-6.4-6z" ${F}/><circle cx="25" cy="28" r="4.5" fill="DARK"/><circle cx="39" cy="28" r="4.5" fill="DARK"/>`,
+  warn:`<path d="M32 5 61 57H3z" ${F} stroke="CLR" stroke-width="4" stroke-linejoin="round"/><path d="M32 24v15M32 48v.5" stroke="DARK" stroke-width="6" stroke-linecap="round"/>`,
+  bug:`<path d="M20 30H8M20 40H5M20 50H9M44 30h12M44 40h15M44 50h11M27 11l-5-7M37 11l5-7" ${SW(4)}/><ellipse cx="32" cy="39" rx="13" ry="17" ${F}/><circle cx="32" cy="17" r="7.5" ${F}/><path d="M32 25v30" stroke="DARK" stroke-width="2.5"/>`,
+  coffee:`<path d="M10 24h36v13a15 15 0 0 1-15 15h-6A15 15 0 0 1 10 37z" ${F}/><path d="M46 28h3a7 7 0 0 1 0 14h-4M21 6q5 5 0 11M32 6q5 5 0 11" ${SW(4)}/>`,
+  layers:`<path d="M32 7 59 21 32 35 5 21z" ${F}/><path d="M5 32l27 14 27-14M5 43l27 14 27-14" ${S}/>`,
+  clock:`<circle cx="32" cy="35" r="22" ${S}/><path d="M32 35V22M32 35l10 6M25 5h14" ${S}/>`,
+  pen:`<path d="M32 4 51 31 41 57H23L13 31z" ${F}/><circle cx="32" cy="35" r="5" fill="DARK"/><path d="M32 8v22" stroke="DARK" stroke-width="3"/>`,
+  branch:`<path d="M18 18v28M46 28c0 14-14 16-28 18" ${S}/><circle cx="18" cy="13" r="7" ${F}/><circle cx="18" cy="51" r="7" ${F}/><circle cx="46" cy="22" r="7" ${F}/>`,
+  scope:`<circle cx="32" cy="32" r="19" ${S}/><circle cx="32" cy="32" r="5" ${F}/><path d="M32 4v13M32 47v13M4 32h13M47 32h13" ${S}/>`,
+  flame:`<path d="M32 59c-12 0-21-8-21-19 0-10 7-15 9-25 6 5 8 10 8 14 3-3 5-9 3-17 10 6 22 16 22 28 0 11-9 19-21 19z" ${F}/><path d="M32 59c-5 0-9-4-9-9 0-6 5-8 7-14 5 4 11 8 11 14 0 5-4 9-9 9z" fill="DARK" fill-opacity=".45"/>`,
+  pad:`<path d="M18 17h28c8 0 12 6 14 16l2 12c1 6-6 9-10 4l-6-7H18l-6 7c-4 5-11 2-10-4l2-12c2-10 6-16 14-16z" ${F}/><path d="M19 25v11M13.5 30.5h11" stroke="DARK" stroke-width="4" stroke-linecap="round"/><circle cx="42" cy="27" r="3.3" fill="DARK"/><circle cx="49" cy="34" r="3.3" fill="DARK"/>`,
+};
+/* ---------- custom art: icons/<id>.svg, icons/frame.svg, icons/frame-front.svg ---------- */
+const ASSETS={icon:{},frame:null,frameFront:null};
+const SVG_START=/^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*(<!DOCTYPE[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i;
+async function loadSVG(path){
+  try{const r=await fetch(path,{cache:'no-cache'});if(!r.ok)return null;const t=await r.text();
+    if(!SVG_START.test(t))return null;return 'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(t)))}catch(e){return null}
+}
+async function loadAssets(){
+  const [fr,ff,...icons]=await Promise.all([loadSVG('icons/frame.svg'),loadSVG('icons/frame-front.svg'),...ACH.map(a=>loadSVG('icons/'+a.id+'.svg'))]);
+  ASSETS.frame=fr;ASSETS.frameFront=ff;ACH.forEach((a,i)=>{if(icons[i])ASSETS.icon[a.id]=icons[i]});
+  if(fr||ff||icons.some(Boolean)){imgCache.clear();renderList();drawStory()}
+}
+const imgTag=(href,x,y,w,h,extra='')=>`<image href="${href}" xlink:href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${extra}/>`;
+
+let uid=0;
+function iconSVG(a,locked,framed){
+  const id='i'+(uid++);
+  const rare=!locked && !!framed;
+  const top=locked?'#b3b8bf':`hsl(${a.hue} ${a.sat??80}% ${a.sat!=null?68:62}%)`;
+  const bot=locked?'#4b5058':`hsl(${a.hue} ${a.sat??74}% ${a.sat!=null?36:33}%)`;
+  const glyphCol=locked?'#eef0f2':'#ffffff';
+  const t=rare?{x:21,w:78,r:9}:{x:6,w:108,r:13};
+  const sc=(t.w*0.6)/64, gx=t.x+t.w*0.2;
+  const g=GLYPH[a.g].replaceAll('CLR',glyphCol).replaceAll('DARK',bot);
+  const shadow=GLYPH[a.g].replaceAll('CLR','rgba(0,0,0,.35)').replaceAll('DARK','rgba(0,0,0,0)');
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 120"><defs>
+<filter id="${id}k" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope=".78"/><feFuncG type="linear" slope=".78"/><feFuncB type="linear" slope=".78"/></feComponentTransfer></filter>
+<linearGradient id="${id}t" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient>
+<linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4bf"/><stop offset=".45" stop-color="#f4b73a"/><stop offset="1" stop-color="#9c540a"/></linearGradient>
+<radialGradient id="${id}w"><stop offset=".5" stop-color="#ffc24a" stop-opacity=".8"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient></defs>`;
+  let dragon=''; // front layer (drawn over the tile) — empty for the v0 frame
+  if(rare&&ASSETS.frame){
+    s+=`<circle cx="60" cy="60" r="60" fill="url(#${id}w)"/>`+imgTag(ASSETS.frame,0,0,120,120);
+  }else if(rare){
+    // dragon frame v0: horns, dorsal spines, wing, tail
+    const dp=`fill="url(#${id}g)" stroke="#5a2a00" stroke-width="1.2" stroke-linejoin="round"`;
+    s+=`<circle cx="60" cy="60" r="60" fill="url(#${id}w)"/>
+<path ${dp} d="M25 17C19 9 11 5 2 3c8 5 12 12 13 21z"/>
+<path ${dp} d="M95 17c6-8 14-12 23-14-8 5-12 12-13 21z"/>
+<path ${dp} d="M15 34 4 38l11 6zM15 50 5 55l10 5zM15 66 7 71l8 5z"/>
+<path ${dp} d="M105 34l14-7-8 12 9 1-9 6 7 3-13 5z"/>
+<path ${dp} d="M36 104c10 11 34 14 52 8 10-3 18-1 24 6l6 1c-4-11-16-16-30-12-16 5-34 4-46-3z"/>
+<rect x="15" y="15" width="90" height="90" rx="13" fill="none" stroke="url(#${id}g)" stroke-width="5"/>
+<rect x="15" y="15" width="90" height="90" rx="13" fill="none" stroke="#5a2a00" stroke-opacity=".5" stroke-width="1"/>`;
+  }
+  const custom=ASSETS.icon[a.id];
+  if(custom){
+    s+=imgTag(custom,t.x,t.x,t.w,t.w,locked?`filter="url(#${id}k)"`:'');
+  }else{
+    s+=`<rect x="${t.x}" y="${t.x}" width="${t.w}" height="${t.w}" rx="${t.r}" fill="url(#${id}t)"/>
+  <path d="M${t.x} ${t.x+t.r}a${t.r} ${t.r} 0 0 1 ${t.r}-${t.r}h${t.w-2*t.r}a${t.r} ${t.r} 0 0 1 ${t.r} ${t.r}v${t.w*0.3}c-${t.w*0.35} ${t.w*0.12}-${t.w*0.65} ${t.w*0.12}-${t.w} 0z" fill="#fff" fill-opacity=".16"/>
+  <rect x="${t.x+.75}" y="${t.x+.75}" width="${t.w-1.5}" height="${t.w-1.5}" rx="${t.r-.75}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+  <g transform="translate(${gx+1.5} ${gx+2.5}) scale(${sc})">${shadow}</g>
+  <g transform="translate(${gx} ${gx}) scale(${sc})">${g}</g>`;
+    if(a.b){
+      const e=t.x+t.w-4;
+      s+=`<text x="${e}" y="${e}" text-anchor="end" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="${rare?17:22}" fill="#fff" stroke="#151515" stroke-width="5" paint-order="stroke" stroke-linejoin="round">${a.b}</text>`;
+    }
+  }
+  if(rare&&ASSETS.frameFront)dragon=imgTag(ASSETS.frameFront,0,0,120,120);
+  return s+dragon+'</svg>';
+}
+
+/* ---------- state ---------- */
+const KEY='grad-ach-v3';
+const TOTAL=ACH.filter(a=>!a.grp).length+new Set(ACH.filter(a=>a.grp).map(a=>a.grp)).size; // honours tiers count once
+const state={earned:new Set(['did','jarvis','brackeys','apes','bug','ghosted','main','layers','grass','daredevil']),featured:'did',order:[],filter:'all',q:''};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){state.earned=new Set(s.earned.filter(id=>ACH.some(a=>a.id===id)));state.featured=s.featured;state.order=Array.isArray(s.order)?s.order:[]}}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({earned:[...state.earned],featured:state.featured,order:state.order}))}catch(e){}}
+
+/* ---------- list UI ---------- */
+const $=s=>document.querySelector(s);
+const listEl=$('#list');
+function earnedInOrder(){return [...state.earned].map(id=>ACH.find(a=>a.id===id)).filter(Boolean)}
+function storyList(){
+  const feat=featuredAch();
+  const earned=earnedInOrder().filter(a=>a!==feat);
+  const chosen=state.order.map(id=>earned.find(a=>a.id===id)).filter(Boolean).slice(0,5);
+  return {chosen,list:[...chosen,...earned.filter(a=>!chosen.includes(a))]};
+}
+function featuredAch(){
+  const earned=earnedInOrder();
+  return earned.find(a=>a.id===state.featured)||earned[0]||null;
+}
+function renderList(){
+  const n=state.earned.size, tot=TOTAL, p=Math.round(n/tot*100);
+  $('#progText').textContent=`${n} of ${tot} achievements earned`;
+  $('#progPct').textContent=`(${p}%)`;
+  $('#progBar').style.width=p+'%';
+  const feat=featuredAch();
+  const order=storyList().chosen.map(a=>a.id);
+  const q=state.q.trim().toLowerCase();
+  const items=ACH.filter(a=>{
+    const on=state.earned.has(a.id);
+    if(state.filter==='on'&&!on)return false;
+    if(state.filter==='off'&&on)return false;
+    return !q||(a.t+' '+a.d).toLowerCase().includes(q);
+  });
+  if(!items.length){listEl.innerHTML=`<div class="empty">No achievements match that.</div>`;return}
+  listEl.innerHTML=items.map(a=>{
+    const on=state.earned.has(a.id), isF=feat&&feat.id===a.id;
+    return `<div class="ach ${on?'on':'locked'}${isF?' featured':''}" role="button" tabindex="0" aria-pressed="${on}" data-id="${a.id}">
+      <div class="ic">${iconSVG(a,!on,isF)}</div>
+      <div style="min-width:0"><h3>${a.t}</h3><p>${a.d}</p><div class="pct">${a.pct}% of graduates have this achievement</div></div>
+      <div class="side"><span class="state">${on?(isF?'':(order.includes(a.id)?'<b class="ord">#'+(order.indexOf(a.id)+1)+'</b> ':''))+'Unlocked Oct 14, 2026':'Locked'}</span>${isF?'<span class="fchip">★ Featured</span>':''}</div>
+    </div>`;
+  }).join('');
+}
+function toggle(id){
+  if(state.earned.has(id)){state.earned.delete(id);if(state.featured===id)state.featured=null;state.order=state.order.filter(x=>x!==id)}
+  else{
+    const a=ACH.find(x=>x.id===id);
+    if(a&&a.grp)ACH.forEach(o=>{if(o.grp===a.grp&&o.id!==id&&state.earned.has(o.id)){state.earned.delete(o.id);if(state.featured===o.id)state.featured=null;state.order=state.order.filter(x=>x!==o.id)}});
+    state.earned.add(id);
+  }
+  update();
+}
+listEl.addEventListener('click',e=>{
+  const row=e.target.closest('.ach');if(row)toggle(row.dataset.id);
+});
+listEl.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('ach')){e.preventDefault();toggle(e.target.dataset.id)}
+});
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  state.filter=b.dataset.f;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-pressed',x===b));renderList();
+}));
+$('#search').addEventListener('input',e=>{state.q=e.target.value;renderList()});
+
+/* ---------- story canvas ---------- */
+const cv=$('#story'),ctx=cv.getContext('2d'),W=1080,H=1920;
+const imgCache=new Map();
+function iconImg(a,locked,framed){
+  const k=a.id+'|'+(locked?1:0)+'|'+(framed?1:0);
+  if(!imgCache.has(k)){
+    imgCache.set(k,new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);
+      im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(iconSVG(a,locked,framed));}));
+  }
+  return imgCache.get(k);
+}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)}
+function font(w,px,fam){ctx.font=`${w} ${px}px ${fam==='d'?'"Chakra Petch"':'"Nunito Sans"'}, Arial, sans-serif`}
+function spacing(v){if('letterSpacing' in ctx)ctx.letterSpacing=v+'px'}
+function wrap(text,maxW,maxLines){
+  const words=text.split(' ');const lines=[];let cur='';
+  for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t}
+  if(cur)lines.push(cur);
+  if(lines.length>maxLines){const keep=lines.slice(0,maxLines);let l=keep[maxLines-1]+'…';
+    while(ctx.measureText(l).width>maxW&&l.length>2)l=l.slice(0,-2)+'…';keep[maxLines-1]=l;return keep}
+  return lines;
+}
+function sparkle(cx,cy,r){
+  ctx.save();ctx.shadowColor='rgba(255,196,74,.95)';ctx.shadowBlur=r*1.6;
+  ctx.beginPath();ctx.moveTo(cx,cy-r);ctx.quadraticCurveTo(cx,cy,cx+r,cy);ctx.quadraticCurveTo(cx,cy,cx,cy+r);
+  ctx.quadraticCurveTo(cx,cy,cx-r,cy);ctx.quadraticCurveTo(cx,cy,cx,cy-r);ctx.fillStyle='#fff7d6';ctx.fill();ctx.restore();
+}
+let tok=0, latestBlob=null;
+async function drawStory(){
+  const my=++tok;
+  await document.fonts.ready;
+  const earned=ACH.filter(a=>state.earned.has(a.id));
+  const locked=ACH.filter(a=>!state.earned.has(a.id)&&!(a.grp&&ACH.some(o=>o.grp===a.grp&&state.earned.has(o.id))));
+  const feat=featuredAch();
+  const rest=storyList().list;
+  const LMAX=6; const lockShow=locked.length>LMAX?locked.slice(0,LMAX-1):locked; const lOver=locked.length-lockShow.length;
+
+  // geometry
+  const px=60,pw=960,x0=104,cw=872;
+  const ICON=104, RX=x0+20+ICON+24, RW=x0+cw-24-RX, RGAP=12, MORE_H=70;
+  const hHead=48+34, hProg=124;
+  const FTW=cw-300-28; let fT=[],fD=[];
+  if(feat){font(800,46);fT=wrap(feat.t,FTW,2);font(600,30);fD=wrap(feat.d,FTW,2)}
+  const fHC=76+(fT.length-1)*52+48+(fD.length-1)*40+46+36+34;
+  const hFeat=feat?Math.max(300,fHC):0;
+  const hLock=locked.length?(2+52+26+116):0;
+  const fixed=hHead+hProg+28+(feat?hFeat+28:0)+(locked.length?hLock+20:0)+44;
+  const MAXPANEL=1700;
+
+  // measure rows (title + full flavor text) and fit as many as possible
+  font(600,27);
+  // always show up to 5; if space is tight, shorten long titles/flavor text instead of dropping rows
+  const mk=(tMax,dMax)=>rest.slice(0,5).map(a=>{font(800,34);const tl=wrap(a.t,RW-100,tMax);font(600,27);const lines=wrap(a.d,RW,dMax);return{a,tl,lines,h:Math.max(ICON+32,52+(tl.length-1)*40+lines.length*34+26)}});
+  const rOver=Math.max(0,rest.length-5);
+  const budget=MAXPANEL-fixed-(rOver?MORE_H+RGAP:0);
+  let shown=[];
+  for(const [t,d] of [[2,2],[2,1],[1,1]]){shown=mk(t,d);if(shown.reduce((n,r)=>n+r.h+RGAP,0)<=budget)break}
+  const used=shown.reduce((n,r)=>n+r.h+RGAP,0);
+  const hList=used+(rOver?MORE_H+RGAP:0);
+
+  const imgs=new Map();
+  await Promise.all([...(feat?[(async()=>imgs.set(feat.id,await iconImg(feat,false,true)))()]:[]),...shown.map(async r=>imgs.set(r.a.id,await iconImg(r.a,false,false)))].concat(
+    lockShow.map(async a=>imgs.set(a.id+'L',await iconImg(a,true)))));
+  if(my!==tok)return;
+
+  const panelH=fixed+hList;
+  const panelTop=Math.max(110,Math.round((H-panelH)/2-40));
+
+  // background
+  ctx.clearRect(0,0,W,H);
+  let g=ctx.createRadialGradient(540,120,40,540,520,1500);
+  g.addColorStop(0,'#d42230');g.addColorStop(.42,'#7a0c15');g.addColorStop(1,'#1c0407');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.globalAlpha=.06;ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  for(let i=-H;i<W;i+=28){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+H,H);ctx.stroke()}ctx.restore();
+
+  // panel
+  ctx.save();ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=60;ctx.shadowOffsetY=20;
+  rr(px,panelTop,pw,panelH,20);ctx.fillStyle='rgba(18,20,26,.94)';ctx.fill();ctx.restore();
+  rr(px+.5,panelTop+.5,pw-1,panelH-1,20);ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=2;ctx.stroke();
+
+  let y=panelTop+48;
+  ctx.textBaseline='alphabetic';
+  font(600,26,'d');spacing(4);ctx.fillStyle='#9aa3ad';ctx.textAlign='left';
+  ctx.fillText('ACHIEVEMENTS',x0,y+10);
+  ctx.textAlign='right';ctx.fillStyle='#ffb9bf';
+  ctx.fillText('DIGIPEN  ·  CLASS OF 2026',x0+cw,y+10);
+  spacing(0);
+  y+=34;
+
+  // progress
+  rr(x0,y,cw,hProg,10);ctx.fillStyle='rgba(255,255,255,.05)';ctx.fill();
+  const pct=Math.round(earned.length/TOTAL*100);
+  font(800,30);spacing(1.5);ctx.fillStyle='#e6e9ee';ctx.textAlign='left';
+  ctx.fillText(`${earned.length} OF ${TOTAL} ACHIEVEMENTS EARNED`,x0+28,y+54);
+  ctx.textAlign='right';ctx.fillText(`(${pct}%)`,x0+cw-28,y+54);spacing(0);
+  rr(x0+28,y+76,cw-56,16,8);ctx.fillStyle='#3a3f4a';ctx.fill();
+  if(pct>0){const bg=ctx.createLinearGradient(x0,0,x0+cw,0);bg.addColorStop(0,'#47c2ff');bg.addColorStop(1,'#1a7dff');
+    rr(x0+28,y+76,Math.max(16,(cw-56)*pct/100),16,8);ctx.fillStyle=bg;ctx.fill()}
+  y+=hProg+28;
+
+  // featured
+  if(feat){
+    rr(x0,y,cw,hFeat,10);
+    const fg=ctx.createLinearGradient(x0,y,x0+cw,y+hFeat);fg.addColorStop(0,'#3a2a14');fg.addColorStop(.35,'#23262e');fg.addColorStop(1,'#23262e');
+    ctx.fillStyle=fg;ctx.fill();
+    rr(x0+1,y+1,cw-2,hFeat-2,10);ctx.strokeStyle='rgba(244,183,58,.55)';ctx.lineWidth=2;ctx.stroke();
+    const ix=x0+14,iy=y+(hFeat-260)/2;
+    const im=imgs.get(feat.id); if(im)ctx.drawImage(im,ix,iy,260,260);
+    [[ix+246,iy+22,24],[ix+18,iy+226,17],[ix+250,iy+214,12],[ix+36,iy+8,11],
+     [x0+cw-52,y+46,15],[x0+cw-96,y+hFeat-40,9],[x0+cw-28,y+hFeat-26,6]].forEach(([sx,sy,r])=>sparkle(sx,sy,r));
+    const tx=x0+300,tw=cw-300-28;
+    let ty=y+(hFeat-fHC)/2+76;
+    font(800,46);ctx.fillStyle='#fff';ctx.textAlign='left';
+    fT.forEach((l,i)=>ctx.fillText(l,tx,ty+i*52));ty+=(fT.length-1)*52+48;
+    font(600,30);ctx.fillStyle='#c3c8d0';
+    fD.forEach((l,i)=>ctx.fillText(l,tx,ty+i*40));ty+=(fD.length-1)*40+46;
+    font(600,26);ctx.fillStyle='#7e8794';
+    ctx.fillText(`${feat.pct}% of graduates have this achievement`,tx,ty);
+    ctx.fillText('Unlocked Oct 14, 2026',tx,ty+36);
+    y+=hFeat+28;
+  }
+
+  // list rows: icon, title + rarity, flavor text
+  for(const r of shown){
+    rr(x0,y,cw,r.h,8);ctx.fillStyle='#23262e';ctx.fill();
+    const im=imgs.get(r.a.id); if(im)ctx.drawImage(im,x0+20,y+(r.h-ICON)/2,ICON,ICON);
+    font(600,24);const pctTxt=r.a.pct+'%';const pw2=ctx.measureText(pctTxt).width;
+    ctx.fillStyle='#7e8794';ctx.textAlign='right';ctx.fillText(pctTxt,x0+cw-24,y+52);
+    font(800,34);ctx.fillStyle='#fff';ctx.textAlign='left';
+    r.tl.forEach((l,i)=>ctx.fillText(l,RX,y+52+i*40));
+    font(600,27);ctx.fillStyle='#c3c8d0';
+    r.lines.forEach((l,i)=>ctx.fillText(l,RX,y+52+(r.tl.length-1)*40+34+i*34));
+    y+=r.h+RGAP;
+  }
+  if(rOver){
+    rr(x0,y,cw,MORE_H,8);ctx.fillStyle='#1d2027';ctx.fill();
+    font(800,28);ctx.fillStyle='#c3c8d0';ctx.textAlign='center';
+    ctx.fillText(`+${rOver} more achievement${rOver>1?'s':''} unlocked`,x0+cw/2,y+46);
+    y+=MORE_H+RGAP;
+  }
+
+  // locked
+  if(locked.length){
+    y+=8;
+    ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(x0,y,cw,2);
+    y+=2+52;
+    font(600,26,'d');spacing(4);ctx.fillStyle='#9aa3ad';ctx.textAlign='left';ctx.fillText('LOCKED ACHIEVEMENTS',x0,y);spacing(0);
+    y+=26;
+    const L=116,gap=(cw-L*6)/5;
+    lockShow.forEach((a,i)=>{const im=imgs.get(a.id+'L');if(im){ctx.save();ctx.globalAlpha=.85;ctx.drawImage(im,x0+i*(L+gap),y,L,L);ctx.restore()}});
+    if(lOver){const lx=x0+lockShow.length*(L+gap);rr(lx+6,y+6,L-12,L-12,10);ctx.fillStyle='#2b2f39';ctx.fill();
+      font(800,40);ctx.fillStyle='#c3c8d0';ctx.textAlign='center';ctx.fillText('+'+lOver,lx+L/2,y+L/2+14)}
+  }
+  try{cv.toBlob(b=>{if(my===tok)latestBlob=b},'image/png')}catch(e){latestBlob=null}
+}
+
+/* ---------- featured picker ---------- */
+const pick=$('#pick'),pickList=$('#pickList');
+function openPick(){
+  const feat=featuredAch();
+  const earned=earnedInOrder();
+  pickList.innerHTML=earned.length?earned.map(a=>{const isF=feat&&feat.id===a.id;
+    return `<div class="ach on${isF?' featured':''}" role="button" tabindex="0" data-pick="${a.id}">
+      <div class="ic">${iconSVG(a,false,isF)}</div>
+      <div style="min-width:0"><h3>${a.t}</h3><p>${a.d}</p></div>
+      <div class="side">${isF?'<span class="fchip">★ Featured</span>':''}</div></div>`}).join('')
+    :`<div class="empty">Unlock an achievement first, then you can feature it.</div>`;
+  pick.hidden=false;(pickList.querySelector('[data-pick]')||$('#closePick')).focus();
+}
+function choose(id){state.featured=id;state.order=state.order.filter(x=>x!==id);pick.hidden=true;update();$('#featBtn').focus()}
+$('#featBtn').addEventListener('click',openPick);
+$('#closePick').addEventListener('click',()=>{pick.hidden=true});
+pick.addEventListener('click',e=>{if(e.target===pick){pick.hidden=true;return}const r=e.target.closest('[data-pick]');if(r)choose(r.dataset.pick)});
+pickList.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.pick){e.preventDefault();choose(e.target.dataset.pick)}});
+
+/* ---------- top 5 picker ---------- */
+const ord=$('#order'),ordList=$('#ordList'),ordSlots=$('#ordSlots');
+function renderOrder(){
+  const {chosen}=storyList();state.order=chosen.map(a=>a.id);
+  const feat=featuredAch();const earned=earnedInOrder().filter(a=>a!==feat);
+  ordSlots.innerHTML=[0,1,2,3,4].map(i=>{const a=chosen[i];return `<div class="slot${a?' on':''}"><b>#${i+1}</b><span>${a?a.t:'Empty'}</span></div>`}).join('');
+  const left=5-chosen.length;
+  $('#ordNote').textContent=left?`Tap achievements in the order you want them. Empty slots get filled with your other unlocked ones.`:'All 5 slots filled. Tap a chosen one to remove it.';
+  ordList.innerHTML=earned.length?earned.map(a=>{const i=chosen.indexOf(a),full=!left&&i<0;
+    return `<div class="ach on${full?' dim':''}" role="button" tabindex="0" data-ord="${a.id}" aria-pressed="${i>=0}">
+      <div class="ic">${iconSVG(a,false,false)}</div>
+      <div style="min-width:0"><h3>${a.t}</h3><p>${a.d}</p></div>
+      <div class="side">${i>=0?'<b class="ord">#'+(i+1)+'</b>':''}</div></div>`}).join('')
+    :`<div class="empty">Unlock a few achievements first, then come back to order them.</div>`;
+}
+function tapOrder(id){
+  const i=state.order.indexOf(id);
+  if(i>=0)state.order.splice(i,1);else if(state.order.length<5)state.order.push(id);else return;
+  update();renderOrder();
+  const el=ordList.querySelector(`[data-ord="${id}"]`);if(el)el.focus();
+}
+function closeOrd(){ord.hidden=true;$('#ordBtn').focus()}
+$('#ordBtn').addEventListener('click',()=>{renderOrder();ord.hidden=false;(ordList.querySelector('[data-ord]')||$('#doneOrd')).focus()});
+$('#closeOrd').addEventListener('click',closeOrd);$('#doneOrd').addEventListener('click',closeOrd);
+$('#clearOrd').addEventListener('click',()=>{state.order=[];update();renderOrder()});
+ord.addEventListener('click',e=>{if(e.target===ord){closeOrd();return}const r=e.target.closest('[data-ord]');if(r)tapOrder(r.dataset.ord)});
+ordList.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.ord){e.preventDefault();tapOrder(e.target.dataset.ord)}});
+
+/* ---------- export ---------- */
+const modal=$('#modal'),outImg=$('#outImg');
+const canShareFiles=(()=>{try{return !!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/png'})],'t.png',{type:'image/png'})]}))}catch(e){return false}})();
+if(canShareFiles)$('#saveBtn').textContent='Share or save image';
+$('#saveBtn').addEventListener('click',async()=>{
+  if(canShareFiles&&latestBlob){
+    try{await navigator.share({files:[new File([latestBlob],'digipen-achievements.png',{type:'image/png'})]});return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  await drawStory();
+  const url=cv.toDataURL('image/png');
+  try{const a=document.createElement('a');a.href=url;a.download='digipen-achievements.png';document.body.appendChild(a);a.click();a.remove()}catch(e){}
+  outImg.src=url;modal.hidden=false;$('#closeModal').focus();
+});
+$('#closeModal').addEventListener('click',()=>{modal.hidden=true});
+modal.addEventListener('click',e=>{if(e.target===modal)modal.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.hidden=true;pick.hidden=true;ord.hidden=true}});
+
+function update(){persist();renderList();drawStory()}
+renderList();drawStory();
+document.fonts.ready.then(drawStory);
+loadAssets();
+</script>
+
+</body>
+</html>

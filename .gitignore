@@ -1,0 +1,17 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Source art files: only exported SVGs go in icons/
+*.ai
+*.psd
+*.psb
+*.fig
+*.afdesign
+*.afphoto
+*.sketch
+*.xd
+*.clip
+*.kra
+*.procreate
