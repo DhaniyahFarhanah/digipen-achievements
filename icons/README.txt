@@ -23,7 +23,6 @@ human        Human Made Horrors Beyond Comprehension
 jarvis       Jarvis, Show Me This Guy's Balls
 job          Michael Would Be Proud
 pm           I'm Surrounded By Idiots
-scrum        Scrum Master
 bfa          Honorary BFA
 rtis         Honorary RTIS
 blender      Blender Expert
@@ -34,16 +33,33 @@ brackeys     Brackeys, Our Lord & Savior
 main         Wait...Is This In Main?
 aaa          Triple A
 bug          It's Not A Bug, It's A Feature
-can          Can Is Can
 ghosted      Ghosted
-spoil        Spoil Market
+spoil        Let Them Cook
 machine      Worked On My Machine
 so           Trauma Bonded Too Hard
 apes         Apes. Together. Strong
 daredevil    Daredevil
 honk         Honk Mi Mi Mi
-grass        Touch Grass
+grass        Praise The Sun
+friends      F.R.I.E.N.D.S
 cha          Charisma 100
 wfh          Work From Home
 layers       Layer 847 Copy 2
 gd           Graphic Design Is My Passion
+sit          SIT: Far From Home
+salty        Salty Surprise
+allnight     Sleep is for the Weak
+dgrade       D for Degree
+quick        Do you remember the C?
+attend       You were there...right?
+wifi         LOAD FASTER LA!!!
+lights       Let there be light
+icecream     Guys, there's 'Free' Ice cream
+jam          Side Quest
+semi         Are you kidding me?!
+ifelse       I'm something of a Coder myself
+mixed        Could be mixed better
+remorse      Writer's remorse
+research     I swear it's research
+kirby        Psyched Out
+ball         F*ck It, We Ball
