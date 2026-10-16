@@ -63,6 +63,11 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px)
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue-2),var(--blue));border-radius:4px;transition:width .3s}
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:0 16px 12px}
 .tabs{display:flex;gap:4px}
+.clearall{appearance:none;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--muted);font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.clearall:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.clearall:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.clearall.armed{background:#c7323e;border-color:#c7323e;color:#fff}
+.clearall:disabled{opacity:.35;cursor:default}
 .tab{appearance:none;border:0;background:transparent;color:var(--muted);font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-radius:999px;cursor:pointer}
 .tab[aria-pressed="true"]{background:#3a3f4a;color:#fff}
 .tab:focus-visible{outline:2px solid var(--blue)}
@@ -157,6 +162,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.5vw,42px)
           <button class="tab" data-f="on" aria-pressed="false">Unlocked</button>
           <button class="tab" data-f="off" aria-pressed="false">Locked</button>
         </div>
+        <button class="clearall" id="clearAll" type="button">Clear all</button>
       </div>
       <div class="list" id="list"></div>
     </section>
@@ -642,8 +648,22 @@ $('#saveBtn').addEventListener('click',async()=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){pick.hidden=true;ord.hidden=true}});
 
-function update(){persist();renderList();drawStory()}
-renderList();drawStory();
+/* ---------- clear all (tap twice to confirm) ---------- */
+const clearBtn=$('#clearAll');let clearTimer=null;
+function disarmClear(){clearTimeout(clearTimer);clearBtn.classList.remove('armed');clearBtn.textContent='Clear all'}
+function syncClear(){clearBtn.disabled=state.earned.size===0;if(clearBtn.disabled)disarmClear()}
+clearBtn.addEventListener('click',()=>{
+  if(!clearBtn.classList.contains('armed')){
+    clearBtn.classList.add('armed');clearBtn.textContent='Tap again to clear';
+    clearTimer=setTimeout(disarmClear,3000);return;
+  }
+  disarmClear();
+  state.earned.clear();state.featured=null;state.order=[];
+  update();
+});
+
+function update(){persist();renderList();drawStory();syncClear()}
+renderList();drawStory();syncClear();
 document.fonts.ready.then(drawStory);
 loadAssets();
 </script>
